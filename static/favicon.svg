@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="ink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff2d7b"/>
+      <stop offset="100%" stop-color="#c026d3"/>
+    </linearGradient>
+  </defs>
+  <!-- Code brackets -->
+  <text x="4" y="44" font-family="monospace" font-size="38" font-weight="bold" fill="#e0e0e0">&lt;/</text>
+  <!-- Ink drop -->
+  <path d="M52 16 C52 16, 44 28, 44 36 C44 40.4 47.6 44 52 44 C56.4 44 60 40.4 60 36 C60 28 52 16 52 16Z" fill="url(#ink)"/>
+</svg>

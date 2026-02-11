@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>codeink — Syntax Highlighter</title>
+  <meta name="description" content="Convert code to syntax-highlighted rich text optimized for pasting into Microsoft Outlook.">
+  <meta property="og:title" content="codeink — Syntax Highlighter">
+  <meta property="og:description" content="Paste code, copy as rich text for Outlook. Client-side syntax highlighting with 40+ languages and 12 themes.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/NeckBeardPrince/codeink">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="codeink — Syntax Highlighter">
+  <meta name="twitter:description" content="Paste code, copy as rich text for Outlook. Client-side syntax highlighting with 40+ languages and 12 themes.">
+  <meta name="theme-color" content="#1a1a2e">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link id="hljs-theme" rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- Common languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/elixir.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/erlang.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/graphql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/groovy.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/haskell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/latex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/makefile.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/nginx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/objectivec.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/perl.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/plaintext.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/powershell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/r.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/scala.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/scss.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/shell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/swift.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/vbnet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1><span class="logo-code">code</span><span class="logo-ink">ink</span></h1>
+    <p class="subtitle">Paste code, copy as rich text for Outlook</p>
+  </header>
+
+  <main>
+    <div class="controls">
+      <div class="control-group">
+        <label for="language">Language</label>
+        <select id="language">
+          <option value="auto">Auto-detect</option>
+          <option value="bash">Bash</option>
+          <option value="c">C</option>
+          <option value="cpp">C++</option>
+          <option value="csharp">C#</option>
+          <option value="css">CSS</option>
+          <option value="dart">Dart</option>
+          <option value="dockerfile">Dockerfile</option>
+          <option value="elixir">Elixir</option>
+          <option value="erlang">Erlang</option>
+          <option value="go">Go</option>
+          <option value="graphql">GraphQL</option>
+          <option value="groovy">Groovy</option>
+          <option value="haskell">Haskell</option>
+          <option value="java">Java</option>
+          <option value="javascript">JavaScript</option>
+          <option value="json">JSON</option>
+          <option value="kotlin">Kotlin</option>
+          <option value="latex">LaTeX</option>
+          <option value="lua">Lua</option>
+          <option value="makefile">Makefile</option>
+          <option value="markdown">Markdown</option>
+          <option value="nginx">Nginx</option>
+          <option value="objectivec">Objective-C</option>
+          <option value="perl">Perl</option>
+          <option value="php">PHP</option>
+          <option value="plaintext">Plain Text</option>
+          <option value="powershell">PowerShell</option>
+          <option value="python">Python</option>
+          <option value="r">R</option>
+          <option value="ruby">Ruby</option>
+          <option value="rust">Rust</option>
+          <option value="scala">Scala</option>
+          <option value="scss">SCSS</option>
+          <option value="shell">Shell</option>
+          <option value="sql">SQL</option>
+          <option value="swift">Swift</option>
+          <option value="typescript">TypeScript</option>
+          <option value="vbnet">VB.NET</option>
+          <option value="xml">XML / HTML</option>
+          <option value="yaml">YAML</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="theme">Theme</label>
+        <select id="theme">
+          <option value="default">Default</option>
+          <option value="github">GitHub</option>
+          <option value="github-dark">GitHub Dark</option>
+          <option value="monokai">Monokai</option>
+          <option value="vs">Visual Studio</option>
+          <option value="vs2015">VS 2015 (Dark)</option>
+          <option value="atom-one-dark">Atom One Dark</option>
+          <option value="atom-one-light">Atom One Light</option>
+          <option value="dracula">Dracula</option>
+          <option value="nord">Nord</option>
+          <option value="tokyo-night-dark">Tokyo Night</option>
+          <option value="stackoverflow-light">Stack Overflow Light</option>
+          <option value="stackoverflow-dark">Stack Overflow Dark</option>
+        </select>
+      </div>
+
+      <div class="control-group control-group--toggle">
+        <label for="line-numbers">Line numbers</label>
+        <input type="checkbox" id="line-numbers">
+      </div>
+
+      <button id="copy-btn" title="Ctrl+Enter / Cmd+Enter">Copy as Rich Text</button>
+    </div>
+
+    <div class="editor">
+      <textarea id="code-input" placeholder="Paste your code here..." spellcheck="false"></textarea>
+      <div id="preview" class="preview">
+        <pre><code id="highlighted-code"></code></pre>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://github.com/NeckBeardPrince/codeink" target="_blank" rel="noopener">GitHub</a>
+    <div class="keyboard-hint">Keyboard: Ctrl+Enter / Cmd+Enter = Copy, Tab = Indent</div>
+    <div class="built-with">
+      Built by <a href="https://iamadam.dev/" target="_blank" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 700;">Adam</a>
+      <span style="margin: 0 6px; color: #666;">+</span>
+      <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Claude AI</span>
+      <span style="margin: 0 6px; color: #666;">+</span>
+      <a href="https://github.com/NeckBeardPrince/codeink/graphs/contributors" target="_blank" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 700;">the Community</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
+</body>
+</html>
