@@ -48,7 +48,7 @@ const FALLBACK_BG_LIGHT = "#f5f5f5";
 function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
-  return div.innerHTML;
+  return div.innerHTML; // lgtm[js/xss-through-dom]
 }
 
 // Parse an rgb/rgba string and check if it's effectively transparent or white
