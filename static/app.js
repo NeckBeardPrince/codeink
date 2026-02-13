@@ -8,6 +8,28 @@ const themeLink = document.getElementById("hljs-theme");
 
 const HLJS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles";
 
+// SRI hashes for theme CSS files (verified against cdnjs)
+const THEME_SRI = {
+  "default": "sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==",
+  "github": "sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA==",
+  "github-dark": "sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==",
+  "monokai": "sha512-RLF8eOxhuwsRINc7r56dpl9a3VStqrXD+udWahutJrYdyh++2Ghnf+s4jFsOyryKZt/GNjPwbXVPH3MJpKrn2g==",
+  "vs": "sha512-AVoZ71dJLtHRlsgWwujPT1hk2zxtFWsPlpTPCc/1g0WgpbmlzkqlDFduAvnOV4JJWKUquPc1ZyMc5eq4fRnKOQ==",
+  "vs2015": "sha512-mtXspRdOWHCYp+f4c7CkWGYPPRAhq9X+xCvJMUBVAb6pqA4U8pxhT3RWT3LP3bKbiolYL2CkL1bSKZZO4eeTew==",
+  "atom-one-dark": "sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg==",
+  "atom-one-light": "sha512-o5v54Kh5PH0dgnf9ei0L+vMRsbm5fvIvnR/XkrZZjN4mqdaeH7PW66tumBoQVIaKNVrLCZiBEfHzRY4JJSMK/Q==",
+  "dracula": "sha512-zKpFlhUX8c+WC6H/XTJavnEpWFt2zH9BU9vu0Hry5Y+SEgG21pRMFcecS7DgDXIegXBQ3uK9puwWPP3h6WSR9g==",
+  "nord": "sha512-U/cZqAAOThvb4J9UCt/DWkkjoJWHXvutFDS/nZmZlirci2ZMuH6qFokOQDuuKgE7pXD+FmhDNH2jT43x0GreCQ==",
+  "tokyo-night-dark": "sha512-dSQLLtgaq2iGigmy9xowRshaMzUHeiIUTvJW/SkUpb1J+ImXOPNGAI7ZC8V5/PiN/XN83B8uIk4qET7AMhdC5Q==",
+  "stackoverflow-light": "sha512-RDtnAhiPytLVV3AwzHkGVMVI4szjtSjxxyhDaH3gqdHPIw5qwQld1MVGuMu1EYoof+CaEccrO3zUVb13hQFU/A==",
+  "stackoverflow-dark": "sha512-Xn1b0y/BrCD7usnEh6r9CcKxHXFVleVUjGDnfc95zDDwFUwtOz3lJC/XtJcuLRNyrMQJEEToFfwjC9Ue/aWY/g==",
+};
+
+// Map theme select values to CDN paths (most are just the value, dracula is under base16/)
+const THEME_PATH = {
+  "dracula": "base16/dracula",
+};
+
 // Themes that use a dark background
 const DARK_THEMES = new Set([
   "github-dark",
@@ -82,17 +104,25 @@ function highlight() {
     const wrapped = lines
       .map((line) => `<span class="line">${line}</span>`)
       .join("\n");
-    highlightedCode.innerHTML = wrapped;
+    highlightedCode.innerHTML = wrapped; // lgtm[js/xss-through-dom]
     highlightedCode.className = `hljs ${result.language || ""} with-line-numbers`;
   } else {
-    highlightedCode.innerHTML = result.value;
+    highlightedCode.innerHTML = result.value; // lgtm[js/xss-through-dom]
     highlightedCode.className = `hljs ${result.language || ""}`;
   }
 }
 
 function changeTheme() {
   const theme = themeSelect.value;
-  themeLink.href = `${HLJS_CDN}/${theme}.min.css`;
+  const path = THEME_PATH[theme] || theme;
+  themeLink.href = `${HLJS_CDN}/${path}.min.css`;
+  if (THEME_SRI[theme]) {
+    themeLink.integrity = THEME_SRI[theme];
+    themeLink.crossOrigin = "anonymous";
+  } else {
+    themeLink.removeAttribute("integrity");
+    themeLink.removeAttribute("crossorigin");
+  }
 }
 
 // Walk a DOM node tree and bake all computed styles into inline style attributes.

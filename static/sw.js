@@ -28,7 +28,8 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   // For CDN resources (highlight.js), use network-first strategy
-  if (event.request.url.includes("cdnjs.cloudflare.com")) {
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.hostname === "cdnjs.cloudflare.com") {
     event.respondWith(
       fetch(event.request)
         .then((response) => {

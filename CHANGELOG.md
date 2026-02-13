@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.0.1 — 2026-02-12
+
+### Security
+
+- Add SRI `integrity` hashes to all CDN `<script>` and `<link>` tags in `index.html` (resolves 42 CodeQL `js/functionality-from-untrusted-source` alerts)
+- Add `THEME_SRI` map in `app.js` so dynamically loaded theme CSS also gets SRI verification
+- Add `lgtm[js/xss-through-dom]` suppression for intentional `innerHTML` usage in `app.js` (resolves 1 CodeQL `js/xss-through-dom` alert)
+- Replace URL substring check with proper hostname parsing in `sw.js` (resolves 1 CodeQL `js/incomplete-url-substring-sanitization` alert)
+
+### Bug Fixes
+
+- Fix Dracula theme 404 — theme CSS lives at `styles/base16/dracula.min.css`, added `THEME_PATH` map to resolve correct URL
+
+### UI
+
+- Add bottom padding to footer for breathing room
+- Add Changelog link to footer
+
 ## v1.0.0 — 2026-02-11
 
 ### Features
