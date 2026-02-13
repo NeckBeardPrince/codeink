@@ -27,7 +27,18 @@ const THEME_SRI = {
 
 // Map theme select values to CDN paths (most are just the value, dracula is under base16/)
 const THEME_PATH = {
+  "default": "default",
+  "github": "github",
+  "github-dark": "github-dark",
+  "monokai": "monokai",
+  "vs2015": "vs2015",
+  "atom-one-light": "atom-one-light",
+  "atom-one-dark": "atom-one-dark",
   "dracula": "base16/dracula",
+  "nord": "nord",
+  "tokyo-night-dark": "tokyo-night-dark",
+  "stackoverflow-light": "stackoverflow-light",
+  "stackoverflow-dark": "stackoverflow-dark",
 };
 
 // Themes that use a dark background
@@ -114,7 +125,11 @@ function highlight() {
 
 function changeTheme() {
   const theme = themeSelect.value;
-  const path = THEME_PATH[theme] || theme;
+  const path = THEME_PATH[theme];
+  if (!path) {
+    // Unknown theme value; do not update the theme link with untrusted data.
+    return;
+  }
   themeLink.href = `${HLJS_CDN}/${path}.min.css`;
   if (THEME_SRI[theme]) {
     themeLink.integrity = THEME_SRI[theme];
