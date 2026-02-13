@@ -31,6 +31,7 @@ const THEME_PATH = {
   "github": "github",
   "github-dark": "github-dark",
   "monokai": "monokai",
+  "vs": "vs",
   "vs2015": "vs2015",
   "atom-one-light": "atom-one-light",
   "atom-one-dark": "atom-one-dark",
