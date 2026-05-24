@@ -1,4 +1,4 @@
-FROM nginx:alpine@sha256:7e8ff0a32da368869608f285124b4375b901401d88f5027865d8f88984d35d38
+FROM nginx:alpine@sha256:8b1e78743a03dbb2c95171cc58639fef29abc8816598e27fb910ed2e621e589a
 
 # Remove default nginx config and html
 RUN rm /etc/nginx/conf.d/default.conf
