@@ -27,9 +27,22 @@ jobs:
 
       - name: Verify container starts
         run: |
-          docker run -d --name codeink-test -p 8080:80 codeink:test
+          docker run -d --name codeink-test -p 8080:8080 codeink:test
           sleep 2
           curl -f http://localhost:8080/ || (docker logs codeink-test && exit 1)
+
+      - name: Verify security headers on every response type
+        run: |
+          # nginx add_header is dropped in any location that sets its own
+          # headers, so check HTML, JS, CSS, and vendored paths separately.
+          hljs_js=$(grep -oE 'src="vendor/[^"]*/highlight\.min\.js"' static/index.html | cut -d'"' -f2)
+          for path in / /app.js /style.css /sw.js "/$hljs_js"; do
+            for header in x-content-type-options content-security-policy; do
+              curl -sfI "http://localhost:8080$path" | grep -qi "^$header:" \
+                || { echo "MISSING $header on $path"; curl -sI "http://localhost:8080$path"; exit 1; }
+            done
+            echo "OK: $path"
+          done
           docker stop codeink-test
 
   html-validate:
@@ -44,11 +57,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Check for broken CDN links
+      - name: Verify vendored assets
         run: |
-          echo "Checking highlight.js CDN links..."
-          grep -oP 'https://cdnjs\.cloudflare\.com[^"]+' static/index.html | while read url; do
-            echo "  Checking: $url"
-            curl -sf --head "$url" > /dev/null || { echo "  BROKEN: $url"; exit 1; }
-          done
-          echo "All CDN links valid."
+          echo "Checking that every local reference in index.html resolves..."
+          grep -oE '(src|href)="[^"]*"' static/index.html | cut -d'"' -f2 \
+            | grep -vE '^(https?:)?//' > /tmp/refs.txt
+          test -s /tmp/refs.txt || { echo "No local asset references found"; exit 1; }
+          while read -r ref; do
+            test -f "static/$ref" || { echo "MISSING: static/$ref"; exit 1; }
+          done < /tmp/refs.txt
+          echo "All $(wc -l < /tmp/refs.txt) local references resolve."
+
+          css_count=$(find static/vendor -name '*.min.css' | wc -l)
+          lang_count=$(find static/vendor -path '*/languages/*.min.js' | wc -l)
+          test "$css_count" -ge 13 || { echo "Expected >=13 theme CSS files, found $css_count"; exit 1; }
+          test "$lang_count" -ge 40 || { echo "Expected >=40 language packs, found $lang_count"; exit 1; }
+          echo "Vendor tree: $lang_count language packs, $css_count themes."

@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.1.0 — 2026-07-06
+
+### Security
+
+- **Vendor highlight.js locally** — all highlight.js assets (core, 40 language packs, 13 themes) now live in `static/vendor/highlight.js/<version>/` instead of loading from cdnjs. Every vendored JS file was verified byte-for-byte against the SRI hashes previously committed in `index.html`. Removes the CDN as a runtime dependency and fixes a version drift where theme CSS loaded 11.9.0 while the library was 11.11.1. Added `scripts/update-hljs.sh` for future upgrades.
+- **Add Content-Security-Policy** — strict `'self'`-only policy sent as an nginx header (`security-headers.conf`) and as a `<meta>` tag for GitHub Pages. Required moving the service worker registration out of an inline `<script>` and footer inline styles into `style.css`.
+- **Fix nginx `add_header` inheritance bug** — the `Cache-Control` header in the CSS/JS location block was silently dropping all security headers on those responses. Headers now come from a shared `security-headers.conf` included in every block. CI now asserts security headers are present on every response type.
+- **Fix service worker staleness** — local assets were cache-first with a fixed cache name, so deployed fixes never reached returning users. The app shell is now network-first with cache fallback; version-stamped `/vendor/` assets stay cache-first. Also: only successful GET responses are cached, and precache paths are now relative so the PWA works on GitHub Pages project sites.
+- **Run container as non-root** — switched base image to `nginx-unprivileged` (port 8080), and hardened docker-compose with `read_only`, `cap_drop: ALL`, and `no-new-privileges`.
+- **Remove deprecated `X-XSS-Protection` header** — obsolete; the browser XSS auditor it invoked was removed from modern browsers and enabled XS-Leak side channels in old ones. Superseded by CSP.
+- Add `server_tokens off` to stop advertising the nginx version
+- Bind the Go dev server to `127.0.0.1` instead of all interfaces
+- Docker image builds now attach SLSA provenance and an SBOM
+- Remove unused `escapeHtml()` helper from `app.js`
+
+### Breaking
+
+- The container now listens on **8080** instead of 80 and runs as uid 101: use `docker run -p 8080:8080` / update reverse proxy upstreams accordingly.
+
 ## v1.0.1 — 2026-02-12
 
 ### Security

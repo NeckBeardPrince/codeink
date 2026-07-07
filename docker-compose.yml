@@ -2,5 +2,15 @@ services:
   codeink:
     build: .
     ports:
-      - "8080:80"
+      # Docker port publishing bypasses host firewalls like ufw. If only a
+      # local reverse proxy should reach this, use "127.0.0.1:8080:8080".
+      - "8080:8080"
     restart: unless-stopped
+    read_only: true
+    tmpfs:
+      # nginx-unprivileged keeps its pid file and temp dirs under /tmp
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
