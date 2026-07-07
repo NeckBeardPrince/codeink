@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- CSP for hosts that can't set response headers (GitHub Pages). nginx sends
+       the same policy plus frame-ancestors as a header; see security-headers.conf. -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>codeink — Syntax Highlighter</title>
   <meta name="description" content="Convert code to syntax-highlighted rich text optimized for pasting into Microsoft Outlook.">
@@ -16,135 +20,50 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-  <link id="hljs-theme" rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"
-    integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g=="
-    crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
-    integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw=="
-    crossorigin="anonymous"></script>
+  <link id="hljs-theme" rel="stylesheet" href="vendor/highlight.js/11.11.1/styles/default.min.css">
+  <script src="vendor/highlight.js/11.11.1/highlight.min.js"></script>
 
-  <!-- Common languages -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bash.min.js"
-    integrity="sha512-nQ9BQEzuov+Ry6EIH8ve7VKKdOG91Ix3SAQcFmOiBR5qG8sJONrph1InWTJOGjfP5QkSTSy4VnkEsPMoFYRsUQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"
-    integrity="sha512-HheXunBWZVAec/gPxpzgxGZmajdCQWVBxMba1VaUAADs8g7GmlB8k8346ihWgGtyrjfr9Qjmk7+IFHrjj2OaJQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"
-    integrity="sha512-i2YY1iYKnV+oOmxBA9Jd4YFwM8E07ySVuVEEhPWQ/gSVHVvzWhHbvK1REz1KuZL4amejLDjslRvMIo8ORiTu6Q=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/csharp.min.js"
-    integrity="sha512-E508cDPDWSFwXbo0jUpAxAuDtuKyg3qzALy/oyrTBcP07/Xz79ajxXl4LzoNAZw+hr4NAnjPhAdwN0qtmJ9ukg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/css.min.js"
-    integrity="sha512-fQhadp2Av4sRhTYd9TEggQW4NrosThwDUXIMLin90uepvmCZG0mRTdPVtHujrXD22qMTtdQlrAEdvWocezI8ow=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/dart.min.js"
-    integrity="sha512-4NIdIujw2gXoLU7x+versij0q7JzrtjDETxeDaBIb2gM7EctoudrUUtWm+aTx9ODExJTTCLzq06Gjs642x/DwA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/dockerfile.min.js"
-    integrity="sha512-I2W0xPYARYkIy70gPRp7+04UsyKccIdvUSR7WI+7L8n9h7hVT/cg4+3QDBoiQZKMQVdefkdh+J5VieA48ziT4A=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/elixir.min.js"
-    integrity="sha512-/wb3hxW3Kt9mTKFOKoWeynhQcj59a5hWf+DgUfP+2dPuYowl5FfIFVg1Ciw7mVle2Ox22zN/B7duqSpn+0vaPg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/erlang.min.js"
-    integrity="sha512-w7p7wWq3SKGCCDscW3pdHzivnFI2tto2hHaMGXDqtkF25eWDcCwiKdPPK7t5EPijlEvIhPGU3YWsxpEzz6eBFA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"
-    integrity="sha512-weC0VNVf2qQR6OY675qO0AEL92gt3h5f2VGjhMUvi/UqFHaWzIEL5S/8Dt763fWfKftchzb7GryvEj/2HC9Exw=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/graphql.min.js"
-    integrity="sha512-0eGbOfnQU+gXihHTbUVKGrJ52sWu9e/9ryao/XeDhQb4EJP1wEVd0jN4G8jImQ/vcEArdv2Kl4mswrEu/xh8pw=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/groovy.min.js"
-    integrity="sha512-m3dC7AFgO1uAIgONIQ3eSoEEeeiuvXAjXgTaKNv9M0VgEa0uimzpst078j9GrcFfyX685Qd0rDdJTt8bY2xRbw=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"
-    integrity="sha512-wV1s4ylNcflirsC0Ug9dDahOxjj/JSQheHv0loB9Q3bv7G0TYLduOWWmhz2MjMKRO6+LS8AgeuhBB8Gny4pdFQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"
-    integrity="sha512-DTx6faal3nhEB55v+yn8UnXCxaxCdMR6gBZ0zzXhGD2qvtgf6xbW5iA7G4CUn78R9PoPzTelR7xIQwGNUJAv2w=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"
-    integrity="sha512-yfJUrNGEC39mHLjZ37CZG69Ij9Vnan7NHxXVuuBxafgfk4F+n7j/NhNWtyhKGTYEgWfgUqzPYMZJZY1HIsPCbQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"
-    integrity="sha512-f2/ljYb/tG4fTHu6672tyNdoyhTIpt4N1bGrBE8ZjwIgrjDCd+rljLpWCZ2Vym9PBWQy2Tl9O22Pp2rMOMvH4g=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/kotlin.min.js"
-    integrity="sha512-D1t3zJUQv7fxejF9PdzegIA4GlxUgNi+Flze3CCJySdS0AHAxG/1GfB67OnQA9y18Tz9FSoXwmYh+pbq4ubEOA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/latex.min.js"
-    integrity="sha512-4h3uWtv1iEA4sgWqZ1is70GnmESsRzCRaGTyeajS/8Zq0CGWVCCRTrpEw5mJ57vF9LIfwNwCMNeV6IjGytrhrA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lua.min.js"
-    integrity="sha512-X5esXUorjCqQP58g37nqQ7Okq7aLzWMN0uGTmlGzCXfCrrF0uj3IX7riKyXZItmTPZfTx/yLslzphKOERT8Fvg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/makefile.min.js"
-    integrity="sha512-lLnMPGLNcEgvwt6f291Bp+WqF3HRxv+8q1t6PA/XTwZH/D1XLB2tUayRAjfAp6AAUrrieJnXQCUtGZtcMhP6ag=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/markdown.min.js"
-    integrity="sha512-j4HfSOGvYNRQiq8wvftDi9oVmhSqJuh2dALD+Btn53looHt+e1aaNX9gcQsnUAi42694fFhmmU4fx8nzs6VN7Q=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/nginx.min.js"
-    integrity="sha512-kvYzE8uXJNOxB79FbRApSqfjbo7ngD2ulfLeAS5yrDpVL2vpgsw8FhM/N77/xstE183jysYBacXAOrZtgQWW/A=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/objectivec.min.js"
-    integrity="sha512-YCQiJsKM5yuLJlOS/TsyhMLDbWHDBBkv+oK3yGClUkEh7M2aDIhnZqxjs8P6mLRQGESL5d52oboG5+M5wUXV1g=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/perl.min.js"
-    integrity="sha512-aldybEGPrrkkzRlf0uzx1dbMLiF84GlYYgGkZuaTUCh2rmTCMII9yFZNUmYhmt42GwTlb4ShkLu5JrOUOv4qkQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/php.min.js"
-    integrity="sha512-uSKj9vayq7XKzfzflBQdmCuLIzKtsmsv7jjfr85Z0GQxNyID1anc0GMYHsNMo93A0oaro6696CQ5Q00xvCpoBQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/plaintext.min.js"
-    integrity="sha512-8G3A7cgC22yWtFGqrwXjmznP+IcB9wYQRgsOVO4pQDpJ0HWgpD8lMMShOXdU225S4qww0bEUwsz+foINFWbwwQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/powershell.min.js"
-    integrity="sha512-J5RVPDNPGNQPjzhjtYPsrLHTX/7GPhPU1AvmyCo/hjKWBecwfX6ByD0oG/NAS5VU3hwk8A/DVVxjXm4ZEBJwhg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"
-    integrity="sha512-/uCTceIDOniHf+VUKbCnP/x6GQSRrm4GwUtQYMgKa9yIZPGzlR04flSsD+2or7bPn44VY9inIHI4cwNCcZmJDw=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/r.min.js"
-    integrity="sha512-oMSUm9vSYzkL/eM3fYhtlLo1qSL2EYvoiIcbFO3YWYe+Ck/FtGPQGjKOUKN0xSAa/kmZEwgBe2JbOoYsDtCXKg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"
-    integrity="sha512-8lY16hCe+67TXNSFAEbu3F2pIjWGl13YcImknKTP95lL4NuiyVwu7gNfOQNH79ts5Ik3VlCtaL5GB4C4je4FaA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/rust.min.js"
-    integrity="sha512-uSwY2GKSvbwBXA67+Hk3onpjVKHLMc734wgIclGBo3XUVnaksT0Mp3qRjmzVMAsAUrk8ZxbSxGsIQ8I0XkY3Gg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scala.min.js"
-    integrity="sha512-3UjKoUd02m+mNOgk6T3u/klqF9SScQ0dhIMwh15YPc+bqTorejDYLWADWAJX8qPPRdIv5hLoOvommuuakS1Mew=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scss.min.js"
-    integrity="sha512-LC89aZvm4/it+1ZrfP9tE4xRFobBJaXOPHntCCnzeOHW+GAjFWoiYR1dyQLtPuIRr9mngejMPI1jlaK8h1fUzQ=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/shell.min.js"
-    integrity="sha512-W4zfUSnG/iue7LUx5hV2wF+akM0hVh4afLk8Avl3reONnH2lF5wPrg/D0rMGWHgZE2d+4XTjG5EJWzkyegUd5g=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/sql.min.js"
-    integrity="sha512-RzK8J6sL3xE7eyppcm7hjCq6fpW1kDlnKPO5jX+Z++/ChYXqsq5AoFq0z78g3jf/1DV5wMBZukqIyb+0xPkCVw=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/swift.min.js"
-    integrity="sha512-ePC3BJKLRjX2Qz3/MPqbozG7HK6V6ytKqSsAwmmY9IzjIUeoWzVoqGJDHojPNzKXH3q+H4XRJDjCTWiYedm4cA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/typescript.min.js"
-    integrity="sha512-boNfTX+JS3EKGz5StKSBao0E9B3W3/4UR6M8dUKy1SLIdiQ4SpXoBtD9IffOkut6N4quRr4uUWf8K4qXPu2YAA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/vbnet.min.js"
-    integrity="sha512-Cu+RThh6PdmCwBiZjaFipSGSvBbkNB2QLgYGqZu+5vsqOxaOupcYxBqeW3J9u296EVs70tPkz+CV60DOdL0esA=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/xml.min.js"
-    integrity="sha512-G6iETlA7Rg1Z7KZFmG68IxKR81lXlDYESQ3wxy/aeKHaowjIHBGG03C79OveDgTsBN6h/2GNtQFNi8QDOAgmHg=="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/yaml.min.js"
-    integrity="sha512-Y8GzCpg2u9P2M//u+lBP4ogNs3YtllnXlOlintElAyphfK8vOHAju9MlnDakr64cMa9ARpO1IUs51FjwY33g2Q=="
-    crossorigin="anonymous"></script>
+  <!-- Language packs (vendored; see scripts/update-hljs.sh) -->
+  <script src="vendor/highlight.js/11.11.1/languages/bash.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/c.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/cpp.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/csharp.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/css.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/dart.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/dockerfile.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/elixir.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/erlang.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/go.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/graphql.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/groovy.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/haskell.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/java.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/javascript.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/json.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/kotlin.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/latex.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/lua.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/makefile.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/markdown.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/nginx.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/objectivec.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/perl.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/php.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/plaintext.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/powershell.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/python.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/r.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/ruby.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/rust.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/scala.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/scss.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/shell.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/sql.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/swift.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/typescript.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/vbnet.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/xml.min.js"></script>
+  <script src="vendor/highlight.js/11.11.1/languages/yaml.min.js"></script>
 </head>
 <body>
   <header>
@@ -238,23 +157,18 @@
 
   <footer>
     <a href="https://github.com/NeckBeardPrince/codeink" target="_blank" rel="noopener">GitHub</a>
-    <span style="margin: 0 6px; color: #555;">&middot;</span>
+    <span class="footer-dot">&middot;</span>
     <a href="https://github.com/NeckBeardPrince/codeink/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
     <div class="keyboard-hint">Keyboard: Ctrl+Enter / Cmd+Enter = Copy, Tab = Indent</div>
     <div class="built-with">
-      Built by <a href="https://iamadam.dev/" target="_blank" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 700;">Adam</a>
-      <span style="margin: 0 6px; color: #666;">+</span>
-      <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Claude AI</span>
-      <span style="margin: 0 6px; color: #666;">+</span>
-      <a href="https://github.com/NeckBeardPrince/codeink/graphs/contributors" target="_blank" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 700;">the Community</a>
+      Built by <a href="https://iamadam.dev/" target="_blank" rel="noopener" class="grad-link grad-author">Adam</a>
+      <span class="footer-plus">+</span>
+      <span class="grad-link grad-claude">Claude AI</span>
+      <span class="footer-plus">+</span>
+      <a href="https://github.com/NeckBeardPrince/codeink/graphs/contributors" target="_blank" rel="noopener" class="grad-link grad-community">the Community</a>
     </div>
   </footer>
 
   <script src="app.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
 </body>
 </html>

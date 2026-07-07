@@ -1,3 +1,6 @@
+# Vendored third-party code is not ours to lint or reformat
+exclude: ^static/vendor/
+
 repos:
 - repo: https://github.com/gitleaks/gitleaks
   rev: v8.30.0

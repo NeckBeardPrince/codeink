@@ -6,7 +6,7 @@ Outlook strips CSS classes from pasted HTML. **codeink** solves this by walking 
 
 ## Features
 
-- 40+ languages via [highlight.js](https://highlightjs.org/)
+- 40+ languages via a vendored copy of [highlight.js](https://highlightjs.org/) (no CDN, no external requests)
 - 12 themes (dark and light)
 - Auto-detect language mode
 - Live split-pane preview
@@ -28,8 +28,10 @@ docker compose up --build
 
 ```bash
 docker pull ghcr.io/neckbeardprince/codeink:latest
-docker run -p 8080:80 ghcr.io/neckbeardprince/codeink:latest
+docker run -p 8080:8080 ghcr.io/neckbeardprince/codeink:latest
 ```
+
+The image is based on [nginx-unprivileged](https://github.com/nginx/docker-nginx-unprivileged) and runs as a non-root user on port 8080.
 
 ### Local dev (no Docker)
 
@@ -55,31 +57,43 @@ The app is entirely client-side, so it can also be hosted on [GitHub Pages](http
 
 ## Adding Languages or Themes
 
-**Languages:** Add a `<script>` tag in `index.html` for the highlight.js language pack and a corresponding `<option>` in the language `<select>`.
+**Languages:** Add the language to the `LANGUAGES` list in `scripts/update-hljs.sh`, re-run the script, then add a `<script>` tag in `index.html` for the vendored language pack and a corresponding `<option>` in the language `<select>`.
 
-**Themes:** Add an `<option>` in the theme `<select>` in `index.html`. If the theme is dark, add its value to the `DARK_THEMES` set in `app.js`.
+**Themes:** Add the theme to the `THEMES` list in `scripts/update-hljs.sh`, re-run the script, then add an `<option>` in the theme `<select>` in `index.html` and a path entry in `THEME_PATH` in `app.js`. If the theme is dark, add its value to the `DARK_THEMES` set in `app.js`.
+
+## Updating highlight.js
+
+highlight.js is vendored under `static/vendor/highlight.js/<version>/` so the app makes zero external requests:
+
+```bash
+scripts/update-hljs.sh 11.11.1   # downloads, updates references, removes old versions
+```
 
 ## Project Structure
 
 ```
-Dockerfile              # nginx:alpine, serves static files
-docker-compose.yml      # One-command startup (host 8080 -> container 80)
-nginx.conf              # gzip, caching, security headers
-main.go                 # Go HTTP server for local dev
+Dockerfile              # nginx-unprivileged (non-root), serves static files
+docker-compose.yml      # One-command startup (host 8080 -> container 8080)
+nginx.conf              # gzip, caching, security header includes
+security-headers.conf   # Shared security headers incl. Content-Security-Policy
+main.go                 # Go HTTP server for local dev (binds 127.0.0.1)
 go.mod                  # Go module
+scripts/
+  update-hljs.sh        # Re-vendor highlight.js at a given version
 static/
-  index.html            # Single-page app with highlight.js from CDN
+  index.html            # Single-page app
   style.css             # Dark UI theme, responsive grid layout
   app.js                # Highlighting, inline style resolution, clipboard copy
   favicon.svg           # SVG favicon (code brackets + ink drop)
   manifest.json         # PWA manifest
   sw.js                 # Service worker for offline support
+  vendor/highlight.js/  # Vendored highlight.js core, languages, and themes
 .github/
   workflows/
     docker-publish.yml  # Build + push to GHCR on push/tag
-    ci.yml              # Docker build smoke test + CDN link validation
+    ci.yml              # Docker smoke test, security header + vendored asset checks
     pages.yml           # Deploy to GitHub Pages
-  dependabot.yml        # Automated dependency updates
+renovate.json           # Automated dependency updates
 ```
 
 ## License

@@ -16,6 +16,8 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
 
-	fmt.Printf("Listening on :%s\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	// Dev-only server; bind loopback so it isn't reachable from the LAN.
+	addr := "127.0.0.1:" + port
+	fmt.Printf("Listening on http://%s\n", addr)
+	log.Fatal(http.ListenAndServe(addr, nil))
 }

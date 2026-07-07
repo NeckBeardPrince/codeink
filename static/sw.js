@@ -1,11 +1,14 @@
-const CACHE_NAME = "codeink-v1";
+const CACHE_NAME = "codeink-v2";
+
+// Relative to the service worker scope so this also works when the app is
+// served from a subpath (e.g. GitHub Pages project sites).
 const STATIC_ASSETS = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/app.js",
-  "/favicon.svg",
-  "/manifest.json",
+  "./",
+  "./index.html",
+  "./style.css",
+  "./app.js",
+  "./favicon.svg",
+  "./manifest.json",
 ];
 
 self.addEventListener("install", (event) => {
@@ -26,31 +29,44 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+function cachePut(request, response) {
+  if (response.ok) {
+    const clone = response.clone();
+    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+  }
+  return response;
+}
+
 self.addEventListener("fetch", (event) => {
-  // For CDN resources (highlight.js), use network-first strategy
-  const requestUrl = new URL(event.request.url);
-  if (requestUrl.hostname === "cdnjs.cloudflare.com") {
+  const request = event.request;
+  if (request.method !== "GET") return;
+
+  const requestUrl = new URL(request.url);
+  if (requestUrl.origin !== self.location.origin) return;
+
+  // Vendored assets live in version-stamped directories, so their URLs change
+  // on upgrade and cache-first is safe.
+  if (requestUrl.pathname.includes("/vendor/")) {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          return response;
-        })
-        .catch(() => caches.match(event.request))
+      caches.match(request).then(
+        (cached) =>
+          cached || fetch(request).then((response) => cachePut(request, response))
+      )
     );
     return;
   }
 
-  // For local assets, use cache-first strategy
+  // App shell: network-first so deployed fixes reach returning users, with
+  // cache fallback for offline use.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        return response;
-      });
-    })
+    fetch(request)
+      .then((response) => cachePut(request, response))
+      .catch(() =>
+        caches.match(request).then((cached) => {
+          if (cached) return cached;
+          if (request.mode === "navigate") return caches.match("./");
+          return Response.error();
+        })
+      )
   );
 });
