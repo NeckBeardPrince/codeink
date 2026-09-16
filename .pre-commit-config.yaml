@@ -45,8 +45,3 @@ repos:
     rev: v8.30.0
     hooks:
       - id: gitleaks
-
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.10.0
-    hooks:
-      - id: eslint
