@@ -29,7 +29,6 @@
   // Better commit messages and PR titles
   "commitMessageTopic": "{{depName}}",
   "commitMessageExtra": "({{currentVersion}} → {{newVersion}})",
-  // "prTitle": "⬆️ {{commitMessageTopic}}{{{commitMessageExtra}}}",
   // Include changelogs in PRs for better context
   "fetchChangeLogs": "pr",
 
@@ -65,16 +64,6 @@
     { "matchCategories": ["docker"], "addLabels": ["docker"] },
     { "matchCategories": ["github-actions"], "addLabels": ["github-actions"] },
 
-    // === DEV DEPENDENCIES ===
-    // Handle dev deps differently - they're lower risk and can update more frequently
-    {
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "schedule": ["at any time"], // More frequent updates for dev tools
-      "automerge": true,
-      "addLabels": ["dev-deps"]
-    },
-
     // === MAJOR VERSION HANDLING ===
     // Give major updates special treatment - they need human review
     {
@@ -87,15 +76,9 @@
 
     // === SAFE UPDATES (AUTO-MERGE) ===
     // Auto-merge safe updates (minor/patch/digests) - major versions need human review
+    // Applies to all managers, including github-actions - no separate rule needed.
     {
       "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance"],
-      "automerge": true
-    },
-
-    // === GITHUB ACTIONS ===
-    // GitHub Actions are generally safe to auto-merge
-    {
-      "matchManagers": ["github-actions"],
       "automerge": true
     },
 
@@ -116,12 +99,12 @@
       "automerge": true
     },
 
-    // Docker images: group updates, pin to digests for reproducibility
+    // Docker images: group updates and auto-merge safe ones.
+    // Digest pinning is already handled by the config:best-practices preset (docker:pinDigests).
     {
       "matchCategories": ["docker"],
       "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance"],
       "groupName": "docker", // Single PR for all Docker updates
-      "pinDigests": true, // Use SHA digests instead of tags for deterministic builds
       "automerge": true
     }
   ]
