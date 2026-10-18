@@ -76,9 +76,19 @@
 
     // === SAFE UPDATES (AUTO-MERGE) ===
     // Auto-merge safe updates (minor/patch/digests) - major versions need human review
-    // Applies to all managers, including github-actions - no separate rule needed.
     {
       "matchUpdateTypes": ["minor", "patch", "digest", "lockFileMaintenance"],
+      "automerge": true
+    },
+
+    // === GITHUB ACTIONS ===
+    // Group non-major action updates into one PR and auto-merge it.
+    // harden-runner is excluded so its fast-track rule above keeps its own PR.
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["!step-security/harden-runner"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "github actions",
       "automerge": true
     },
 
